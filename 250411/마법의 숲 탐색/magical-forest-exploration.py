@@ -35,7 +35,7 @@ def score(current_x, current_y, grid, exit, R, i, C):
     return max_row
 
 def is_out_of_bounds(x, y, R, C):
-    return x <= 0 or x >= R-1 or y <= 0 or y >= C-1
+    return not (1 <= x < R-1 and 1 <= y < C-1)
 
 R, C, K = map(int, input().split())
 gollam = [list(map(int, input().split())) for _ in range(K)]
