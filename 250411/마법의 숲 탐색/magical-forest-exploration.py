@@ -115,6 +115,7 @@ for i in range(K):
                     grid = [[0] * C for _ in range(R)]
                     exit = [[0] * C for _ in range(R)]
                     break
+
                 else:
                     nx, ny = current_x + dx[d], current_y + dy[d]
                     if 0 <= nx < R and 0 <= ny < C:
@@ -122,6 +123,7 @@ for i in range(K):
 
                     answer += score(current_x, current_y, grid, exit, R, i, C) + 1
                     break
+                    
         else:
             current_x += 1
 
