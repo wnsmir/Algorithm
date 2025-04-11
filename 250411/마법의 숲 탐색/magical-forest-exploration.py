@@ -127,4 +127,7 @@ for i in range(K):
         else:
             current_x += 1
 
+for row in grid:
+    print(row)
+
 print(answer)
