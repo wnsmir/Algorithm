@@ -6,7 +6,12 @@ dx = [0, 0, 1, -1]
 dy = [1, -1, 0, 0]
 directions = ['동', '서', '남', '북']
 
-def find_exit(grid, N, M):
+def find_exit(grid, N):
+    """
+    원래 grid (N×N)에서 값이 3인 위치 주변에 0이 있으면,
+    그 방향에 따라 확장 grid(2*M×8*M) 상의 출구 좌표를 계산하여 반환.
+    (출구 좌표는 문제 조건에 맞게 오프셋을 조정)
+    """
     for i in range(N):
         for j in range(N):
             if grid[i][j] == 3:
@@ -15,9 +20,9 @@ def find_exit(grid, N, M):
                     if 0 <= ni < N and 0 <= nj < N and grid[ni][nj] == 0:
                         direction = directions[d]
                         if direction in ['남', '북']:
-                            position = j
+                            position = j   # 열 기준
                         else:
-                            position = i
+                            position = i   # 행 기준
                         if direction == '동':
                             exit1_x, exit1_y = 2 * M - 1, position
                             exit2_x, exit2_y = 2 * M - 1, position + M * 4
@@ -31,7 +36,7 @@ def find_exit(grid, N, M):
                             exit1_x, exit1_y = 2 * M - 1, position + M * 3
                             exit2_x, exit2_y = 2 * M - 1, position + M * 7
                         return exit1_x, exit1_y, exit2_x, exit2_y
-    return -1, -1, -1, -1 
+    return None, None, None, None
 
 def rotate_matrix(matrix, angle):
     """행렬을 시계 방향으로 angle(°) 만큼 회전"""
@@ -167,10 +172,7 @@ for obs in strange:
     if 0 <= r < N and 0 <= c < N:
         grid[r][c] = 1
 
-exit1_x, exit1_y, exit2_x, exit2_y = find_exit(grid, N, M)
-if exit1_x == -1:
-    print(-1)
-    exit()
+exit1_x, exit1_y, exit2_x, exit2_y = find_exit(grid, N)
 score = []
 
 # 서쪽 붙이기 (time_top을 90° 회전)
