@@ -1,24 +1,21 @@
-count = 0
-answer = 0
-found = False
-
 def solution(word):
     chars = ['A', 'E', 'I', 'O', 'U']
-
+    count = 0
+    answer = 0
+    
     def dfs(path):
-        global count, answer, found
-        
-        if found:
-            return
-        if path == word:
+        nonlocal count, answer
+        #답 return
+        if word == path:
             answer = count
-            found = True
             return
+        #종료조건
         if len(path) == 5:
             return
-        for ch in chars:
+        for char in chars:
             count += 1
-            dfs(path + ch)
-    
-    dfs("")
+            dfs(path + char)
+        
+        
+    dfs('')
     return answer
