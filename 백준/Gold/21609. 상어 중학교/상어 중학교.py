@@ -4,31 +4,28 @@ def bfs(grid):
     N = len(grid)
     dx = [1, -1, 0, 0]
     dy = [0, 0, 1, -1]
-
+    visited = [[-1]*N for _ in range(N)]
     max_blocks = []
     max_rainbow = 0
 
     for x in range(N):
         for y in range(N):
-            # (x, y)부터 새로 시작하는 BFS에서는 반드시 visited도 새로 초기화
             color = None
             blocks = []
             rainbow = 0
 
-            # 시작 칸이 일반 블록(>0)이 아니면 건너뛰기
+            # 시작 칸이 일반 블록이 아니면 건너뛰기
             if grid[x][y] <= 0:
                 continue
-
-            queue = deque()
-            queue.append((x, y))
-            blocks.append((x, y))
-            visited[x][y] = 1
+            else:
+                queue = deque()
+                queue.append((x, y))
+                blocks.append((x, y))
+                visited[x][y] = 1
+                color = grid[x][y]
 
             while queue:
                 cx, cy = queue.popleft()
-                if grid[cx][cy] != 0 and grid[cx][cy] != -1:
-                    color = grid[cx][cy]
-
                 for i in range(4):
                     nx, ny = cx + dx[i], cy + dy[i]
                     if 0 <= nx < N and 0 <= ny < N and visited[nx][ny] == -1:
@@ -116,7 +113,6 @@ grid = [list(map(int, input().split())) for _ in range(N)]
 total_score = 0
 
 while True:
-    visited = [[-1]*N for _ in range(N)]
     score = bfs(grid)
     if score is False:
         print(total_score)
