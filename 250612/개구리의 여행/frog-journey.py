@@ -1,64 +1,58 @@
 from heapq import heappush, heappop
 
+from heapq import heappush, heappop
+INF = 10**18
+
 def speedrun(r1, c1, r2, c2):
-    visited = [[[False]*6 for _ in range(N)] for _ in range(N)]
-    pq = []
-    heappush(pq, (0, r1, c1, 1))
+    dist = [[[INF]*6 for _ in range(N)] for _ in range(N)]
+    dist[r1][c1][1] = 0
+    pq = [(0, r1, c1, 1)]
 
     dx = [1, -1, 0, 0]
     dy = [0, 0, 1, -1]
 
     while pq:
-        time, x, y, jump = heappop(pq)
-        q_time = time
-
-        # 목적지가 아니고 이미 방문했으면 continue
-        if visited[x][y][jump]:
+        t, x, y, jump = heappop(pq)
+        if t != dist[x][y][jump]:        # 이미 더 짧은 경로 처리됨
             continue
-        
-        #방문 안했으면 방문처리
-        visited[x][y][jump] = True
+        if (x, y) == (r2, c2):
+            return t                     # 최단시간 확정
 
-        # 목적지면 시간을 반환
-        if x == r2 and y == c2:
-            return time 
-
-        # 4방향으로
-        for i in range(4):
-            # 현재의 점프력으로 도달할 수 있는곳이
-            nx, ny = x + dx[i] * jump, y + dy[i] * jump
-            check = True
-            # 격자 밖이라면 pass
+        # 4방향 이동
+        for d in range(4):
+            nx, ny = x + dx[d]*jump, y + dy[d]*jump
             if not (0 <= nx < N and 0 <= ny < N):
                 continue
-            # 도착지점이 미끄러지는 곳이거나 벽이라면 pass
-            if mMap[nx][ny] == 'S' or mMap[nx][ny] == '#':
+            if mMap[nx][ny] in ('S', '#'):
                 continue
-            # 목적지까지 가는도중 벽이 있다면 pass
-            for dist in range(1, jump +1):
-                ax, ay = x + dx[i] * dist, y + dy[i] * dist
-                # 가는길 중간에 벽이면 그 방향은 더이상 진행안함
+            # 중간에 벽 있는지 체크
+            ok = True
+            for k in range(1, jump):
+                ax, ay = x + dx[d]*k, y + dy[d]*k
                 if mMap[ax][ay] == '#':
-                    check = False
+                    ok = False
                     break
-                # 몬스터가 있으면 해당 점프력으로는 불가능
+            if not ok:
+                continue
+            if t+1 < dist[nx][ny][jump]:
+                dist[nx][ny][jump] = t+1
+                heappush(pq, (t+1, nx, ny, jump))
 
-            if check == True:
-                heappush(pq, (time + 1, nx, ny, jump))  
-            #점프력 증가
-        if jump < 5:
-            for i in range(1, 5-jump+1):
-                time = time + (jump + i) ** 2
-                heappush(pq, (time, x, y, jump + i))
-            time = q_time
+        # jump 증가 (최대 5)
+        for add in range(1, 6-jump):
+            new_jump = jump + add
+            new_t = t + (jump + add)**2
+            if new_t < dist[x][y][new_jump]:
+                dist[x][y][new_jump] = new_t
+                heappush(pq, (new_t, x, y, new_jump))
 
-        # 점프력 감소
+        # jump 감소
         for new_jump in range(1, jump):
-            heappush(pq, (time + 1, x, y, new_jump))   
-               
+            if t+1 < dist[x][y][new_jump]:
+                dist[x][y][new_jump] = t+1
+                heappush(pq, (t+1, x, y, new_jump))
+
     return -1
-
-
 
 N = int(input())
 mMap = [list(input()) for _ in range(N)]
