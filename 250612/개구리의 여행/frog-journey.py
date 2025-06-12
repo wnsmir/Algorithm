@@ -21,18 +21,7 @@ def speedrun(r1, c1, r2, c2):
 
         # 목적지면 시간을 반환
         if x == r2 and y == c2:
-            return time
-        
-        #점프력 증가
-        if jump < 5:
-            for i in range(1, 5-jump+1):
-                time = time + (jump + i) ** 2
-                heappush(pq, (time, x, y, jump + i))
-            time = q_time
-
-        # 점프력 감소
-        for new_jump in range(1, jump):
-            heappush(pq, (time + 1, x, y, new_jump))    
+            return time 
 
         # 4방향으로
         for i in range(4):
@@ -56,6 +45,16 @@ def speedrun(r1, c1, r2, c2):
 
             if check == True:
                 heappush(pq, (time + 1, nx, ny, jump))  
+            #점프력 증가
+        if jump < 5:
+            for i in range(1, 5-jump+1):
+                time = time + (jump + i) ** 2
+                heappush(pq, (time, x, y, jump + i))
+            time = q_time
+
+        # 점프력 감소
+        for new_jump in range(1, jump):
+            heappush(pq, (time + 1, x, y, new_jump))   
                
     return -1
 
