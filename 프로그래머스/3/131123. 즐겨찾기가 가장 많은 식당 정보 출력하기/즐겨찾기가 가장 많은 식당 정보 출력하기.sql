@@ -1,0 +1,5 @@
+SELECT FOOD_TYPE, REST_ID, REST_NAME, FAVORITES from REST_INFO
+
+group by FOOD_TYPE
+having limit 1
+order by FOOD_TYPE desc;
