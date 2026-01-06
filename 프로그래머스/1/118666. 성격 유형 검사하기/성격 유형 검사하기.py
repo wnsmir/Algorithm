@@ -1,56 +1,50 @@
 from collections import defaultdict
 
+
 def solution(survey, choices):
-    result = ""
-    score = defaultdict(list)
-    keys = ["R", "T", "C", "F", "J", "M", "A", "N"]
-    for key in keys:
-        score[key] = []
+    point = defaultdict(int)
+    answer = ''
+    typ = ["R", "C", "J", "A", "T", "F", "M", "N"]
     
-    for i in range(len(choices)):
-        # 점수가 4이 넘으면 오른쪽 원소에 점수추가
-        if choices[i] > 4:
-            score[survey[i][1]].append(choices[i]-4)
-            
-        # 점수가 4보다 낮으면 왼쪽 원소에 점수추가
-        elif choices[i] < 4:
-            score[survey[i][0]].append(4-choices[i])
+    legend_choice = defaultdict(int)
+    for i in range(7):
+        legend_choice[i] = abs(3-i)
+
+    for t in typ:
+        point[t] = 0
+
+    for i in range(len(survey)):
+        if choices[i] < 4:
+            point[survey[i][0]] += legend_choice[choices[i]-1]
+        elif choices[i] > 4:
+            point[survey[i][1]] += legend_choice[choices[i]-1]
+    
+    if point["R"] > point["T"]:
+        answer += "R"
+    elif point["R"] < point["T"]:
+        answer += "T"
+    else:
+        answer += "R"
         
-    print(score)
-    # score에 점수 모두 더해주기
-    for key in keys:
-        score[key] = sum(score[key])
-    
-    # 1유형 비교
-    if score["R"] > score["T"]:
-        result += "R"
-    elif score["R"] < score["T"]:
-        result += "T"
+    if point["C"] > point["F"]:
+        answer += "C"
+    elif point["C"] < point["F"]:
+        answer += "F"
     else:
-        result += "R"
-    
-    # 2유형 비교
-    if score["C"] > score["F"]:
-        result += "C"
-    elif score["C"] < score["F"]:
-        result += "F"
+        answer += "C"
+
+    if point["J"] > point["M"]:
+        answer += "J"
+    elif point["J"] < point["M"]:
+        answer += "M"
     else:
-        result += "C"
+        answer += "J"
     
-    # 3유형 비교
-    if score["J"] > score["M"]:
-        result += "J"
-    elif score["J"] < score["M"]:
-        result += "M"
+    if point["A"] > point["N"]:
+        answer += "A"
+    elif point["A"] < point["N"]:
+        answer += "N"
     else:
-        result += "J"
+        answer += "A"
     
-    # 4유형 비교
-    if score["A"] > score["N"]:
-        result += "A"
-    elif score["A"] < score["N"]:
-        result += "N"
-    else:
-        result += "A"
-        
-    return result
+    return answer
