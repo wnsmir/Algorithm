@@ -1,32 +1,22 @@
 def solution(board, moves):
-    stack = []
-    N = len(board)
+    standby = []
+    count = 0
+    answer = 0
     
-    for move in moves:
-        j = move - 1
-        for i in range(N):
-            # 인형이 없으면 pass
-            if board[i][j] == 0:
-                continue
-            else:
-                stack.append(board[i][j])
-                board[i][j] = 0
+    for y in moves:
+        for x in range(len(board)):
+            if board[x][y-1] != 0:
+                standby.append(board[x][y-1])
+                board[x][y-1] = 0
+                count += 1
+            
+                if count > 1 and standby[count-2] == standby[count-1]:
+                    standby.pop()
+                    standby.pop()
+                    answer += 2
+                    count -= 2
+                
                 break
-    
-    prev_stack = len(stack)
-    flag = True
-    while flag == True:
-        flag = False
-        prev = ''
-        for i in range(len(stack)):
-            if prev == stack[i]:
-                del stack[i]
-                del stack[i-1]
-                flag = True
-                break
-            else:
-                prev = stack[i]            
-    
-    
-    answer = prev_stack - len(stack)
+
+                
     return answer
