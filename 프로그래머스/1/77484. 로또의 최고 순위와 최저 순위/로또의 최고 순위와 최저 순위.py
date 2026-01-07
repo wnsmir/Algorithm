@@ -1,31 +1,29 @@
 def solution(lottos, win_nums):
-    result = []
-    
-    lo_count = 0
     count = 0
-    for lo in lottos:
-        if lo == 0:
-            lo_count += 1
-        else:
-            # 로또 번호를 맞추면
-            if lo in win_nums:
-                count += 1
-    
-    def check(num):
-        if num == 6:
-            return 1
-        elif num == 5:
-            return 2
-        elif num == 4:
-            return 3
-        elif num == 3:
-            return 4
-        elif num ==2:
-            return 5
-        else:
-            return 6
+    zero = 0
+    for lotto in lottos:
+        if lotto == 0:
+            zero += 1
 
-    result.append(check(lo_count + count))
-    result.append(check(count))
+    for lotto in lottos:
+        if lotto in win_nums:
+            # win_nums에서 당첨번호 제거, lotto에서 제거
+            win_nums.remove(lotto)
+            count += 1
     
-    return result
+    max_value = count + zero
+    min_value = count
+    
+    answer_sheet = {}
+    answer_sheet[0] = 6
+    answer_sheet[1] = 6
+    answer_sheet[2] = 5
+    answer_sheet[3] = 4
+    answer_sheet[4] = 3
+    answer_sheet[5] = 2
+    answer_sheet[6] = 1
+    answer = []
+    answer.append(answer_sheet[max_value])
+    answer.append(answer_sheet[min_value])
+
+    return answer
