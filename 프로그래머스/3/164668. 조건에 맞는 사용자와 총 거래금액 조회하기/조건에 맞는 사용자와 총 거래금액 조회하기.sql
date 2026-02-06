@@ -1,10 +1,9 @@
-SELECT u.USER_ID, u.NICKNAME, sum(price) as TOTAL_SALES from
-USED_GOODS_BOARD b left join USED_GOODS_USER u on b.WRITER_ID = u.USER_ID
+SELECT b.WRITER_ID, u.NICKNAME, sum(b.price) as TOTAL_SALES from USED_GOODS_BOARD b join USED_GOODS_USER u on b.WRITER_ID = u.USER_ID
 
-where status = "DONE"
+where status = 'DONE'
 
-group by u.USER_ID
+group by b.WRITER_ID
 
-having sum(price) >= 700000
+having sum(b.PRICE) >= 700000
 
-order by TOTAL_SALES;
+order by TOTAL_SALES
