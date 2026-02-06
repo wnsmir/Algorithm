@@ -1,10 +1,5 @@
-SELECT DISTINCT c.CAR_ID from 
-CAR_RENTAL_COMPANY_CAR c join CAR_RENTAL_COMPANY_RENTAL_HISTORY h
-on c.CAR_ID = h.CAR_ID
+select DISTINCT r.CAR_ID from CAR_RENTAL_COMPANY_CAR r join CAR_RENTAL_COMPANY_RENTAL_HISTORY h on r.CAR_ID = h.CAR_ID 
 
--- 종류가 세단인 경우
-where c.CAR_TYPE = '세단'
+where r.CAR_TYPE = '세단' and h.START_DATE >= '2022-10-01' and h.START_DATE < '2022-11-01'
 
-and month(h.START_DATE) = 10
-
-order by c.CAR_ID desc;
+order by r.CAR_ID desc
