@@ -1,8 +1,5 @@
-SELECT p.ID, p.NAME, p.HOST_ID from PLACES p left join 
-(select ID, HOST_ID from PLACES group by HOST_ID
+SELECT ID, NAME, HOST_ID from PLACES
 
-having count(*) >= 2) h on p.HOST_ID = h.HOST_ID
+where HOST_ID in (select HOST_ID from PLACES group by HOST_ID having count(*) >= 2)
 
-where h.HOST_ID is not null
-
-order by ID;
+order by ID
