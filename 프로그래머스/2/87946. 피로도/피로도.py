@@ -1,37 +1,40 @@
-def permutations(arr, r):
-    result = []
-    visited = [False] * len(arr)
-    
-    def backtrack(path):
-        #종료조건
-        if len(path) == r:
-            result.append(path[:])
-            return
-        #사용할 수
-        for i in range(len(arr)):
-            if not visited[i]:
-                visited[i] = True
-                path.append(arr[i])
-                backtrack(path)
-                path.pop()
-                visited[i] = False
-    
-    backtrack([])
-    return result
-
+# 최소 피로도는 넘겨야 하며
+# 소모 피로도 소모됨
+# 던전은 하루에 하나씩 탐험가능
+# 던전 탐험은 하루에 한번씩 
+from itertools import permutations
 
 def solution(k, dungeons):
-    r = len(dungeons)
-    cases = permutations(dungeons, r)
-    max_turn = 0
-    for case in cases:
-        tired = k
-        turn = 0
-        for i in range(len(case)):
-            if case[i][0] <= tired:
-                tired -= case[i][1]
-                turn += 1
-        if max_turn < turn:
-            max_turn = turn
-
-    return max_turn
+    N = len(dungeons)
+    max_count = 0
+    
+    # 던전 수 만큼 반복
+    arr = []
+    for i in range(N):
+        arr.append(i)
+    
+    permu_list = list(permutations(arr))
+    
+    for i in range(len(list(permu_list))):
+        count = 0
+        case = permu_list[i]
+        now = k
+        for c in case:
+            # 현재 피로도보다 임계피로도가 더 작으면 가능
+            if now >= dungeons[c][0]:
+                # 소모 피로도만큼 제거
+                now -= dungeons[c][1]
+                
+                count += 1
+            # 임계 피로도가 더 높으면 이번 반복문은 건너뛰기
+            else:
+                break
+        
+        # 최대치 변경
+        if max_count <= count:
+            max_count = count
+        
+    return max_count
+                
+                
+                
